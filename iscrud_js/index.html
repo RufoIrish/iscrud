@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>I_S</title>
+</head>
+<style>
+    body{
+        margin-left: 10%;
+        margin-right: 10%;
+        margin-top: 3%;
+        padding:10px;
+    }
+    th{
+        text-align: center;
+    }
+    #formtodo{
+        display: none;
+        height: 50%;
+        width: 50%;
+        text-align: center;
+        /* padding: 10%; */
+    }
+    #inputbox{
+        height: 250px;
+    }
+
+</style>
+<body>
+    <button type="button" id="todo" class="btn btn-primary">Things to do : </button>
+    <div id= "formtodo">
+            <input class="form-control form-control-lg" type="text" placeholder="To do" id ="inputbox">
+            <button type="button"class="btn btn-primary" id= "add">Add</button>
+    </div>
+    <table class="table table-dark" id = "table">
+        <thead>
+          <tr>
+            <!-- <th scope="col">Date</th> -->
+            <th scope="col">To do</th>
+            <th scope="col">Doing</th>
+            <th scope="col">Done</th>
+          </tr>
+        </thead>
+        <tbody id ="tbody">
+        </tbody>
+      </table>
+</body>
+</html>
+<script src="index.js"></script>
+<script>
+$(document).ready(function(){
+    $ajax({
+        
+    })
+})
+</script>
