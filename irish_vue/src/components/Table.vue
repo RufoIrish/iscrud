@@ -4,7 +4,7 @@
     <b-table hover :items="items"></b-table>
   </div>
 </template>
-
+<script   src="https://code.jquery.com/jquery-3.4.1.slim.min.js"   integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="   crossorigin="anonymous"></script>
 <script>
 export default {
   data() {
@@ -12,8 +12,8 @@ export default {
       items: [
         {
           age: 89,
-          first_name: "Irish",
-          last_name: "Rufo"
+          first_name: "",
+          last_name: ""
         //   _rowVariant: "danger"
         },
         {

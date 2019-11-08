@@ -15,7 +15,7 @@ connection.connect()
 
 app.post('/get', (req, res) => {
   var data = req.body
-  connection.query('SELECT * from people', function (err, rows, fields) {
+  connection.query('SELECT * from backlog', function (err, rows, fields) {
     res.send(rows)
     console.log(rows)
     if (err) throw err
@@ -24,8 +24,11 @@ app.post('/get', (req, res) => {
   // res.send(data);
 })
 app.post('/insert', (req, res) => {
+  var datetime = new Date(Date.now()).toLocaleString();
+  console.log(datetime)
   var data = req.body
-  connection.query("Insert into people (fname,mname,lname) Values ('"+req.body+"')"
+  var backlog= data.backlog
+  connection.query("Insert into backlog (user,backlog,date) Values ('irish','"+backlog+"','"+datetime+"')"
     , function (err, rows, fields) {
       res.send(rows)
       console.log(rows)
@@ -37,7 +40,8 @@ app.post('/insert', (req, res) => {
 
 app.post('/delete', (req, res) => {
   var data = req.body
-  connection.query("delete from people where id = 6"
+  var id = data.id
+  connection.query("delete from backlog where id = " + id
     , function (err, rows, fields) {
       res.send(rows)
       console.log(rows)
@@ -47,8 +51,11 @@ app.post('/delete', (req, res) => {
 })
 
 app.post('/update', (req, res) => {
+  var datetime = new Date(Date.now()).toLocaleString();
   var data = req.body
-  connection.query("update people set mname = 'irsih rufo' where id = 9"
+  var id= data.id
+  var newData = data.update
+  connection.query("update backlog set backlog = '"+newData+"',date = '"+datetime+"' where id = " + id
     , function (err, rows, fields) {
       res.send(rows)
       console.log(rows)
