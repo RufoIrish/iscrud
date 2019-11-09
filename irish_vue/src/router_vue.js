@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import About from './views/About.vue'
-import Add from './components/Add'
+import Add from './components/Addcard'
 
 
 Vue.use(Router)

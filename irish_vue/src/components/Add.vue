@@ -1,11 +1,9 @@
 <template>
 <div>
   <b-form >
-    <b-input type="number" name = "age" id="age" v-model="user.age" placeholder="Age"></b-input>
-    <b-input type="text" id="firstname" v-model="user.firstname" placeholder="first name"></b-input>
-    <b-input type="text" id="lastname" v-model="user.lastname" placeholder="last name"></b-input>
+    <b-input type="number" task = "age" id="task" v-model="user.age" placeholder="task"></b-input>
    </b-form>
-     <button @click="login">Add</button>
+     <b-button  variant="primary"  @click="login">Add to task</b-button>
 </div>
 </template>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -28,7 +26,7 @@ export default {
     }
   },
   submit(){
-    axios.post('http://localhost:8080/Add',{user})
+    axios.post('http://localhost:3000/Add',{user})
     .then(response => (alert('added!')))
     .catch(error =>{
       console.log(error)
@@ -36,3 +34,6 @@ export default {
   }
 };
 </script>
+<style lang="stylus" scoped>
+
+</style>
