@@ -50,13 +50,26 @@ app.post('/done', function (req, res) {
     if (db[i].id == data.done.id) {
       db[i].done = true
       // console.log("doing !!!")
-
     }
   }
   res.send(db)
   console.log("db", db)
 
 
+})
+app.post('/delete', function (req, res) {
+  var data = req.body
+  for (var i = 0; i < db.length; i++) {
+    // console.log("data : "+ data)
+    // console.log(db[i].id +" vs "+ data.done.id)
+    if (db[i].id == data.done.id) {
+      db[i].remove()
+      console.log(db)
+      // console.log("doing !!!")
+    }
+  }
+  res.send(db)
+  console.log("db", db)
 })
 
 

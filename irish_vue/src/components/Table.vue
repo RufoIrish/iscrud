@@ -15,49 +15,31 @@
           <!-- <hr /> -->
           <tbody hover v-for="(item,i) in todo" :key="i">
             <tr v-if="item.done== false">
+              <td>{{item.task}}</td>
+              <td>{{item.schedule}}</td>
               <td>
-              {{item.task}}
-
-              </td>
-              <td>
-                {{item.schedule}}
-              </td>
-              <td>   
-                 <b-button
+                <b-button
                   class="btn"
                   id="btn_doing"
                   @click="done(item.id)"
                   variant="outline-success"
-                >mark as done</b-button>&nbsp; <b-button
+                >mark as done</b-button>&nbsp;
+                <b-button
                   class="btn"
                   id="btn_doing"
                   @click="del(item.id)"
                   variant="outline-danger"
                 >delete</b-button>&nbsp;
-                    <b-button
+                <b-button
                   class="btn"
                   id="btn_doing"
                   @click="edit(item.id)"
                   variant="outline-primary"
-                >Edit</b-button> &nbsp;
+                >Edit</b-button>&nbsp;
               </td>
-              
-                <!-- <span v-if="item.doing">{{item.task}}</span>&nbsp; -->
-                <!-- <b-button
-                  class="btn"
-                  id="btn_doing"
-                  @click="done(item.id)"
-                  variant="outline-success"
-                >done</b-button> -->
-      
-              <!-- <td>
-                <span v-if="item.done">{{item.task}}</span>
-              </td> -->
             </tr>
-            <!-- <hr /> -->
           </tbody>
         </table>
-        <!-- <b-table hover :doings="doing"></b-table> -->
       </b-row>
     </b-container>
   </div>
@@ -66,7 +48,6 @@
 <script>
 import axios from "axios";
 export default {
-  
   data() {
     return {
       todo: []
@@ -104,10 +85,29 @@ export default {
         }
       });
     },
-    edit(item){
-      this.$router.push("/Add/"+item);
+    edit(item) {
+      this.$router.push("/Add/" + item);
+    },
+    del(id) {
+      this.todo.map(task => {
+        if (task.id == id) {
+          if (task.done == false) {
+            task.done = true;
+          }
+          console.log(task);
+          axios
+            .post("http://localhost:3000/delete", { done: task })
+            .then(response => {
+              this.todo = response.data;
+              // this.getdata();
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      });
     }
-  },
+  }
 };
 </script>
 <style scoped>

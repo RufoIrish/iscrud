@@ -18,7 +18,7 @@
             autocomplete="off"
             placeholder="Task to add ..."
           ></b-form-input>
-          <br />
+          <br>
           <b-form-input
             v-model="schedule"
             id="schedule"
@@ -27,7 +27,11 @@
             placeholder="Schedule ..."
           ></b-form-input>
         </b-card-text>
-        <b-button @click="submit" variant="primary">Add task!</b-button>&nbsp;
+
+        <b-button @click="submit" variant="primary">
+          <span v-if="item == null">Add task</span>
+          <span v-else>Update</span>
+        </b-button>&nbsp;
         <b-button @click="$router.push('/')" variant="danger">cancel</b-button>
       </b-card>
     </center>
@@ -47,20 +51,22 @@ export default {
   },
   methods: {
     submit() {
-      var Item = { task: this.task, schedule: this.schedule, done: false };
-      var path = "http://localhost:3000/Add";
-      if (this.item != null) {
-        path = "http://localhost:3000/edit";
-        Item["id"] = this.item;
+      if (this.task != null && this.schedule != null) {
+        var Item = { task: this.task, schedule: this.schedule, done: false };
+        var path = "http://localhost:3000/Add";
+        if (this.item != null) {
+          path = "http://localhost:3000/edit";
+          Item["id"] = this.item;
+        }
+        axios
+          .post(path, Item)
+          .then(response => {
+            this.$router.push({ path: "/" });
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
-      axios
-        .post(path, Item)
-        .then(response => {
-          this.$router.push({ path: "/" });
-        })
-        .catch(error => {
-          console.log(error);
-        });
     }
   },
   watch: {
