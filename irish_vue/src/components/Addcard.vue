@@ -11,9 +11,24 @@
         class="mb-2"
       >
         <b-card-text>
-          <b-form-input v-model="task" id="input-none" :state="null" autocomplete="off" placeholder="Task to add ..."></b-form-input>
+          <b-form-input
+            v-model="task"
+            id="input_task"
+            :state="null"
+            autocomplete="off"
+            placeholder="Task to add ..."
+          ></b-form-input>
+          <br />
+          <b-form-input
+            v-model="schedule"
+            id="schedule"
+            :state="null"
+            autocomplete="off"
+            placeholder="Schedule ..."
+          ></b-form-input>
         </b-card-text>
-        <b-button @click="submit" variant="primary">Add task!</b-button>
+        <b-button @click="submit" variant="primary">Add task!</b-button>&nbsp;
+        <b-button @click="$router.push('/')" variant="danger">cancel</b-button>
       </b-card>
     </center>
   </div>
@@ -23,18 +38,46 @@ import axios from "axios";
 export default {
   data() {
     return {
-      task: ""
+      task: "",
+      schedule: ""
     };
+  },
+  props: {
+    item: String
   },
   methods: {
     submit() {
+      var Item = { task: this.task, schedule: this.schedule, done: false };
+      var path = "http://localhost:3000/Add";
+      if (this.item != null) {
+        path = "http://localhost:3000/edit";
+        Item["id"] = this.item;
+      }
       axios
-        .post("http://localhost:3000/Add", { "task": this.task })
+        .post(path, Item)
         .then(response => {
           this.$router.push({ path: "/" });
         })
         .catch(error => {
           console.log(error);
+        });
+    }
+  },
+  watch: {
+    item(val) {
+      console.log(val);
+    }
+  },
+  created() {
+    if (this.item != null) {
+      axios
+        .post("http://localhost:3000/getItem", { id: this.item })
+        .then(res => {
+          this.task = res.data.item.task;
+          this.schedule = res.data.item.schedule;
+        })
+        .catch(err => {
+          console.log(err);
         });
     }
   }

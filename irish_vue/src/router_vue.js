@@ -19,10 +19,17 @@ export default new Router({
             path: '/about',
             name: 'about',
             component: About
-        },{
+        } ,
+        ,{
             path:'/Add',
             name:'add',
-            component: Add
+            component: Add,
+        },
+        {
+            path:'/Add/:item',
+            name:'add2',
+            component: Add,
+            props: true
         }
     ]
 })
