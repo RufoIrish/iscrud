@@ -45,11 +45,8 @@ app.post('/getdata', function (req, res) {
 app.post('/done', function (req, res) {
   var data = req.body
   for (var i = 0; i < db.length; i++) {
-    // console.log("data : "+ data)
-    // console.log(db[i].id +" vs "+ data.done.id)
     if (db[i].id == data.done.id) {
       db[i].done = true
-      // console.log("doing !!!")
     }
   }
   res.send(db)
@@ -57,19 +54,14 @@ app.post('/done', function (req, res) {
 
 
 })
-app.delete('/delete', function (req, res) {
-  var data = req.body
-  for (var i = 0; i < db.length; i++) {
-    console.log("data : "+ data)
-    // console.log(db[i].id +" vs "+ data.delete.task  .id)
-    if (db[i].id.toString() == data.delete.id.toString()) {
-      db.splice(i,1)
-      console.log(db)
-      // console.log("doing !!!")
+app.post('/delete', function (req, res) {
+  for (var i = 0; i < db.length; ++i) {
+    if (db[i].id == req.body.task) {
+  console.log("request : ", req.body.task, "  ",db[i].id)
+        db.splice(i,1)
     }
   }
-  // res.send(db)
-  console.log("db", db)
+  res.status(200).json({db });
 })
 
 
@@ -84,6 +76,21 @@ app.post('/getItem', (req, res) => {
   if (!done) {
     res.status(404).json({ data: "not found" });
   }
+})
+app.post('/clear', (req, res) => {
+
+  for (var i = 0; i < db.length; ++i) {
+    if (db[i].id == req.body.id) {
+      if(db[i].done == true){
+        db.remove(db[i])
+      }
+    }
+  }
+  res.status(200).json({db });
+
+  // if (!done) {
+  //   res.status(404).json({ data: "not found" });
+  // }
 })
 
 app.post("/edit", (req, res) => {

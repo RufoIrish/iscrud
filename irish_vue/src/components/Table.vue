@@ -2,18 +2,26 @@
   <div>
     <router-link to="/Add">
       <b-button variant="success" id="add">Add Task</b-button>
-      
     </router-link>
     <b-button
       class="btn"
       id="btn_history"
       @click="main = false,viewHistory = true"
       variant="primary"
+      v-if="main"
     >View Done Task</b-button>
-    <b-container class="bv-example-row" id = "table_todo"  v-show="main">
+
+    <b-button
+      class="btn"
+      id="btn_todo"
+      @click="viewHistory = false,main= true"
+      variant="primary"
+      v-else
+    >To Do</b-button>
+    <b-container class="bv-example-row" id="table_todo" v-show="main">
       <b-row>
         <!-- <b-table hover :items="todo"></b-table> -->
-        <table class="table table-striped" >
+        <table class="table table-striped">
           <thead>
             <th>Tasks</th>
             <th>Schedule</th>
@@ -53,21 +61,23 @@
       <table class="table table-striped">
         <thead>
           <th>Done</th>
-          <th></th>
+          <th>
+            <b-button class="btn" id="btn_todo" @click="clear" variant="danger">CLEAR</b-button>
+          </th>
         </thead>
         <tbody v-for="(item,i) in todo" :key="i">
           <tr v-if="item.done == true">
             <td>{{item.task}}</td>
-            <span>star ni cya!</span>
+            <span>
+              <img
+                id="star"
+                src="https://graphiccave.com/wp-content/uploads/2015/03/Blue-Star-PNG.png"
+                alt
+              >
+            </span>
           </tr>
         </tbody>
       </table>
-      <b-button
-      class="btn"
-      id="btn_todo"
-      @click="viewHistory = false,main= true"
-      variant="primary"
-    >To Do</b-button>
     </div>
   </div>
 </template>
@@ -79,7 +89,7 @@ export default {
     return {
       todo: [],
       viewHistory: false,
-      main:true
+      main: true
     };
   },
   mounted() {
@@ -88,7 +98,7 @@ export default {
       .then(response => {
         console.log(response);
         this.todo = response.data.filter(todo => !todo.done);
-      })                                             
+      })
       .catch(error => {
         console.log(error);
       });
@@ -106,7 +116,6 @@ export default {
             .then(response => {
               this.todo = response.data;
               console.log("to do : ", this.todo);
-              // this.getdata();
             })
             .catch(error => {
               console.log(error);
@@ -118,24 +127,27 @@ export default {
       this.$router.push("/Add/" + item);
     },
     del(id) {
-      this.todo.map(task => {
-        if (task.id == id) {
-          if (task.done == false) {
-            task.done = false;
-          }
-          console.log(task);
-          axios
-            .post("http://localhost:3000/delete", { delete: task })
-            .then(response => {
-              this.todo = response.data;
-              // this.getdata();
-            })
-            .catch(error => {
-              console.log(error);
-            });
-        }
-      });
+      axios
+        .post("http://localhost:3000/delete",{task: id})
+        .then(response => {
+          this.todo = response.data;
+          // this.getdata();
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
+    clear() {
+      axios
+        .post("http://localhost:3000/clear")
+        .then(response => {
+          this.todo = response.data;
+          // this.getdata();
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
   }
 };
 </script>
@@ -157,7 +169,11 @@ export default {
   padding: 10px;
   margin-bottom: 2%;
 }
-#btn_history{
-  padding: 10px
+#btn_history {
+  padding: 10px;
+}
+#star {
+  height: 20px;
+  width: auto;
 }
 </style>
