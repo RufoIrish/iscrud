@@ -57,18 +57,18 @@ app.post('/done', function (req, res) {
 
 
 })
-app.post('/delete', function (req, res) {
+app.delete('/delete', function (req, res) {
   var data = req.body
   for (var i = 0; i < db.length; i++) {
-    // console.log("data : "+ data)
-    // console.log(db[i].id +" vs "+ data.done.id)
-    if (db[i].id == data.done.id) {
-      db[i].remove()
+    console.log("data : "+ data)
+    // console.log(db[i].id +" vs "+ data.delete.task  .id)
+    if (db[i].id.toString() == data.delete.id.toString()) {
+      db.splice(i,1)
       console.log(db)
       // console.log("doing !!!")
     }
   }
-  res.send(db)
+  // res.send(db)
   console.log("db", db)
 })
 
