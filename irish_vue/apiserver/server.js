@@ -19,7 +19,6 @@ app.post('/Add', function (req, res) {
     schedule: data.schedule
   }
   db.push(datai)
-  // console.log("db=", db)
   res.status(200).json({ message: "succesfully added!" })
 })
 
