@@ -52,7 +52,7 @@ export default {
   methods: {
     submit() {
       if (this.task != null && this.schedule != null) {
-        var Item = { task: this.task, schedule: this.schedule, done: false };
+        var Item = { task: this.task, schedule: this.schedule, done: 0 };
         var path = "http://localhost:3000/Add";
         if (this.item != null) {
           path = "http://localhost:3000/edit";
@@ -79,6 +79,7 @@ export default {
       axios
         .post("http://localhost:3000/getItem", { id: this.item })
         .then(res => {
+          console.log("data : "+res.data.item)
           this.task = res.data.item.task;
           this.schedule = res.data.item.schedule;
         })

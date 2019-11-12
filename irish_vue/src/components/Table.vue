@@ -29,7 +29,7 @@
           </thead>
           <!-- <hr /> -->
           <tbody hover v-for="(item,i) in todo" :key="i">
-            <tr v-if="item.done== false">
+            <tr v-if="item.done== 0">
               <td>{{item.task}}</td>
               <td>{{item.schedule}}</td>
               <td>
@@ -66,7 +66,7 @@
           </th>
         </thead>
         <tbody v-for="(item,i) in todo" :key="i">
-          <tr v-if="item.done == true">
+          <tr v-if="item.done==1">
             <td>{{item.task}}</td>
             <span>
               <img
@@ -107,8 +107,8 @@ export default {
     done(id) {
       this.todo.map(task => {
         if (task.id == id) {
-          if (task.done == false) {
-            task.done = true;
+          if (task.done == 0) {
+            task.done = 1;
           }
           console.log(task);
           axios

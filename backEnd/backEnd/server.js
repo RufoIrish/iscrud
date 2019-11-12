@@ -55,7 +55,7 @@ app.post('/update', (req, res) => {
   var data = req.body
   var id= data.id
   var newData = data.update
-  connection.query("update backlog set backlog = '"+newData+"',date = '"+datetime+"' where id = " + id
+  connection.query("update backlogs set done = '"+newData+"',date = '"+datetime+"' where id = " + id
     , function (err, rows, fields) {
       res.send(rows)
       console.log(rows)
