@@ -48,7 +48,7 @@ export default {
         axios
           .post("http://localhost:3000/name", { name: this.input.username })
           .then(response => {
-            swal("Welcome!");
+            swal("WELCOME!");
             this.$router.push({ path: "/Home" });
           })
           .catch(error => {

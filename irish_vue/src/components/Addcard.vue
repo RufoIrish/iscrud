@@ -4,15 +4,14 @@
     <center>
       <b-card
         title="Task"
-        img-src="https://project-management.com/wp-content/uploads/2019/09/task-management-software.png"
-        img-alt="Image"
+        img-src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSQwWO3MN6M_t8-OMSvBVcUYeD1WfeIO8m07KUnm-5p4styavFB"
         img-top
         tag="article"
-        style="max-width: 20rem;"
+        style="max-width: 20rem;background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSQwWO3MN6M_t8-OMSvBVcUYeD1WfeIO8m07KUnm-5p4styavFB')"
         class="mb-2"
         id="card"
       >
-        <b-card-text>
+        <b-card-text >
           <b-form-input
             v-model="task"
             id="input_task"
@@ -93,9 +92,9 @@ export default {
       axios
         .post("http://localhost:3000/getItem", { id: this.item })
         .then(res => {
-          console.log("data : " + res.data[0].item);
-          this.task = res.data.item.task;
-          this.schedule = res.data.item.schedule;
+          this.task = res.data[0].task;
+          this.schedule = res.data[0].schedule;
+          console.log(res.data[0].task)
         })
         .catch(err => {
           console.log(err);

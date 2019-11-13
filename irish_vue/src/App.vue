@@ -22,11 +22,11 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 0%;
-  /* background-image: url("https://wallpapersite.com/images/pages/pic_w/6752.jpg"); */
+  background-image: url("http://papers.co/wallpaper/papers.co-az51-dessert-minimal-orange-illustration-art-pink-34-iphone6-plus-wallpaper.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  background-color: #f5d7e5;
+  /* background-color: #f5d7e5; */
   height: 100vh;
 }
 #nav{

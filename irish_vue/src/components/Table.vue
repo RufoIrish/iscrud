@@ -9,24 +9,21 @@
       <b-button variant="success" id="add">Add Task</b-button>
     </router-link>
     <b-button
-      class="btn"
-      id="btn_history"
+     class="btn_history"
       @click.prevent="main = false,viewHistory = true"
       variant="primary"
       v-if="main"
     >View Done Task</b-button>
 
     <b-button
-      class="btn"
-      id="btn_todo"
+      class="btn_history "
       @click.prevent="viewHistory = false,main= true"
       variant="primary"
       v-else
     >To Do</b-button>
     <b-button
       style="margin-left:55%"
-      class="btn"
-      id="btn_history"
+      class="btn_history"
       variant="danger"
       @click="$router.push('/')"
       v-if="main"
@@ -41,7 +38,7 @@
             <th></th>
           </thead>
           <!-- <hr /> -->
-          <tbody hover v-for="(item,i) in todo" :key="i"  id = "maintable">
+          <tbody hover v-for="(item,i) in todo" :key="i" id="maintable">
             <tr v-if="item.done== 0">
               <td>{{item.task}}</td>
               <td>{{item.schedule}}</td>
@@ -61,7 +58,7 @@
                 <b-button
                   class="btn"
                   id="btn_doing"
-                  @click.prevent="edit(item.id)"
+                  @click.prevent="edit(item.id,item.task,item.schedule)"
                   variant="outline-primary"
                 >Edit</b-button>&nbsp;
               </td>
@@ -72,13 +69,16 @@
     </b-container>
     <div v-show="viewHistory">
       <span style="font-size:30px;margin-left:0%">Done</span>
-     <b-button style="margin-left:30%;margin-buttom :1%" class="btn" id="btn_todo" @click="clear" variant="danger">CLEAR</b-button>
-     <p></p>
+      <b-button
+        style="margin-left:30%;margin-buttom :1%"
+        class="btn"
+        id="btn_todo"
+        @click="clear()"
+        variant="danger"
+      >CLEAR</b-button>
+      <p></p>
       <div id="table_history">
         <table class="table table-striped">
-          <thead>
-            <th></th>
-          </thead>
           <tbody v-for="(item,i) in todo" :key="i" id="table">
             <tr v-if="item.done==1">
               <td>{{item.task}}</td>
@@ -113,8 +113,7 @@ export default {
       .then(response => {
         // console.log(response);
         this.todo = response.data;
-        this.nickname = response.data.nickname;
-        console.log("nickname", nickname);
+        
       })
       .catch(error => {
         console.log(error);
@@ -148,8 +147,8 @@ export default {
         }
       });
     },
-    edit(item) {
-      this.$router.push("/Add/" + item);
+    edit(id, task, schedule) {
+      this.$router.push("/Add/" + id);
     },
     del(id) {
       this.todo.map(task => {
@@ -176,11 +175,10 @@ export default {
             });
         }
       });
-      this.created();
     },
-    clear() {
+    clear(nickname) {
       axios
-        .post("http://localhost:3000/clear")
+        .post("http://localhost:3000/clear",{name:nickname})
         .then(response => {
           axios
             .post("http://localhost:3000/getdata")
@@ -195,6 +193,12 @@ export default {
         .catch(error => {
           console.log(error);
         });
+      swal({
+        title: "Deleted successfully!",
+        // text: "You clicked the button!",
+        icon: "success",
+        button: "Thanks!"
+      });
     }
   }
 };
@@ -218,17 +222,17 @@ export default {
   height: 500px;
   overflow-x: hidden;
   overflow-y: auto;
-  height: 600px;
+  height: 450px;
   overflow-y: scroll;
   /* border: 2px solid #f5d7e5; */
-   -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -moz-box-shadow: 3px 3px 5px 6px #ccc;
   -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-  box-shadow:         3px 3px 5px 6px #ccc;
+  box-shadow: 3px 3px 5px 6px #ccc;
   /* overflow: hidden; */
   /* max-height: 600px */
 }
-#maintable{
-    margin-right: 12%;
+#maintable {
+  margin-right: 12%;
   margin-left: 12%;
   padding: 10px;
   margin-bottom: 2%;
@@ -239,15 +243,15 @@ export default {
   height: 600px;
   overflow-y: scroll;
   /* border: 2px solid #f5d7e5; */
-   -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -moz-box-shadow: 3px 3px 5px 6px #ccc;
   -webkit-box-shadow: 3px 3px 5px 6px #ccc;
-  box-shadow:         3px 3px 5px 6px #ccc;
+  box-shadow: 3px 3px 5px 6px #ccc;
 }
-#btn_history {
+.btn_history {
   padding: 10px;
 }
 #star {
-  height: 20px;
+  height: 30px;
   width: auto;
 }
 

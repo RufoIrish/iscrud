@@ -119,7 +119,8 @@ app.post('/done', (req, res) => {
 app.post('/delete', (req, res) => {
   var data = req.body
   var id = data.delete.id
-  console.log("id delete : ", id)
+  console.log("id : ", id)
+  // console.log("id delete : ", id)
   connection.query("delete from backlogs where id = " + id
     , function (err, rows, fields) {
       // res.status(200).json({rows });
@@ -153,7 +154,7 @@ app.post('/getItem', (req, res) => {
     // done = true;
     res.send(rows)
     // res.status(200).json({ item: rows});
-    console.log( rows)
+    console.log(rows)
     if (err) throw err
     console.log('The solution is: ', rows)
   })
@@ -180,9 +181,9 @@ app.post('/getItem', (req, res) => {
 
 app.post('/clear', (req, res) => {
   var data = req.body
-  var id = data.id
-  connection.query("delete from backlogs where done = 1"
+  connection.query("delete from backlogs where nickname = '"+name +"' and done = 1"
     , function (err, rows, fields) {
+      console.log("name ", name)
       res.send(rows)
       console.log(rows)
       if (err) throw err
@@ -215,6 +216,7 @@ app.post('/edit', (req, res) => {
   var done =false
   var schedule = data.schedule
   var task = data.task
+  // console.log("edit",task)
   // var done = 0
   connection.query("update backlogs set schedule = '"+schedule+"',task = '"+task+"' where id = " + id
     , function (err, rows, fields) {
