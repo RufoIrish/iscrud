@@ -20,6 +20,7 @@ var connection = mysql.createConnection({
 connection.connect(function(){
   console.log("connected to database!")
 })
+var name ;
 
 // var db = []
 // var doing = []
@@ -37,7 +38,7 @@ connection.connect(function(){
 
 app.post('/Add', (req, res) => {
   var data = req.body
-  connection.query("Insert into backlogs (task, schedule, done) Values ('"+data.task+"','"+data.schedule+"','"+data.done+"')"
+  connection.query("Insert into backlogs (task, schedule, done,nickname) Values ('"+data.task+"','"+data.schedule+"','"+data.done+"','"+name+"')"
     , function (err, rows, fields) {
       res.send(rows)
       console.log(rows)
@@ -51,16 +52,21 @@ app.post('/Add', (req, res) => {
 //   console.log("get", db)
 //   res.send(db)
 // })
+
 app.post('/getdata', (req, res) => {
-  var data = req.body
-  connection.query('SELECT * from backlogs where done = 0', function (err, rows, fields) { 
+  connection.query("SELECT * from backlogs where nickname = '" + name +"'", function (err, rows, fields) { 
     res.send(rows)
     console.log("rows in get data ", rows)
-    console.log("get data : ",rows)
     if (err) throw err
     console.log('The solution is: ', rows)
   })
   // res.send(data);
+})
+
+app.post('/name', (req, res) => {
+ name = req.body.name
+ console.log("name ni niya : ", name)
+  res.send("success");
 })
 // app.post('/doing', function (req, res) {
 //   var data = req.body
@@ -112,16 +118,17 @@ app.post('/done', (req, res) => {
 
 app.post('/delete', (req, res) => {
   var data = req.body
-  // console.log("data irish rufo : ",data.task)
-  var id = data.task
-  console.log("id in delete ", id)
-  connection.query("delete from backlogs where id =  " + id
+  var id = data.delete.id
+  console.log("id delete : ", id)
+  connection.query("delete from backlogs where id = " + id
     , function (err, rows, fields) {
+      // res.status(200).json({rows });
       res.send(rows)
-      console.log(rows)
-      if (err) throw err
-      console.log('The solution is: ', rows)
+         if (err) throw err
+    console.log('error!')
+
     })
+ 
 })
 
 
@@ -141,12 +148,12 @@ app.post('/delete', (req, res) => {
 
 app.post('/getItem', (req, res) => {
   var data = req.body
-  var done = false
+  // var done = false
   connection.query('SELECT * from backlogs where id =' + data.id, function (err, rows, fields) {
-    done = true;
+    // done = true;
     res.send(rows)
     // res.status(200).json({ item: rows});
-    console.log(rows)
+    console.log( rows)
     if (err) throw err
     console.log('The solution is: ', rows)
   })
@@ -205,18 +212,21 @@ app.post('/clear', (req, res) => {
 app.post('/edit', (req, res) => {
   var data = req.body
   var id= data.id
-  console.log("data id edit : ",data.id)
+  var done =false
   var schedule = data.schedule
   var task = data.task
-  var done = 0;
-  connection.query("update backlogs set done = "+done+",schedule = '"+schedule+"',task = '"+task+"' where id = " + id
+  // var done = 0
+  connection.query("update backlogs set schedule = '"+schedule+"',task = '"+task+"' where id = " + id
     , function (err, rows, fields) {
       res.send(rows)
-      console.log(rows)
+      // console.log(rows)
       if (err) throw err
-      console.log('The solution is: ', rows)
+      console.log("error!")
+  
     })
 })
+
+
 
 app.listen(port, function () {
   console.log("listening to port 3000!")

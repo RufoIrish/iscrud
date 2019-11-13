@@ -1,12 +1,17 @@
 <template>
   <div>
+    <hr />
+    <h5
+      style="font-style: oblique;color:#ad6e10"
+    >"The key is not to prioritize what's on your schedule, but to schedule your priorities."</h5>
+    <p style="font-style: oblique;color:#ad6e10">- Steven Covey</p>
     <router-link to="/Add">
       <b-button variant="success" id="add">Add Task</b-button>
     </router-link>
     <b-button
       class="btn"
       id="btn_history"
-      @click="main = false,viewHistory = true"
+      @click.prevent="main = false,viewHistory = true"
       variant="primary"
       v-if="main"
     >View Done Task</b-button>
@@ -14,21 +19,29 @@
     <b-button
       class="btn"
       id="btn_todo"
-      @click="viewHistory = false,main= true"
+      @click.prevent="viewHistory = false,main= true"
       variant="primary"
       v-else
     >To Do</b-button>
+    <b-button
+      style="margin-left:55%"
+      class="btn"
+      id="btn_history"
+      variant="danger"
+      @click="$router.push('/')"
+      v-if="main"
+    >Out</b-button>
     <b-container class="bv-example-row" id="table_todo" v-show="main">
       <b-row>
         <!-- <b-table hover :items="todo"></b-table> -->
-        <table class="table table-striped">
+        <table id="scrolldown" class="table table-striped">
           <thead>
             <th>Tasks</th>
             <th>Schedule</th>
             <th></th>
           </thead>
           <!-- <hr /> -->
-          <tbody hover v-for="(item,i) in todo" :key="i">
+          <tbody hover v-for="(item,i) in todo" :key="i"  id = "maintable">
             <tr v-if="item.done== 0">
               <td>{{item.task}}</td>
               <td>{{item.schedule}}</td>
@@ -36,19 +49,19 @@
                 <b-button
                   class="btn"
                   id="btn_doing"
-                  @click="done(item.id)"
+                  @click.prevent="done(item.id)"
                   variant="outline-success"
                 >mark as done</b-button>&nbsp;
                 <b-button
                   class="btn"
                   id="btn_doing"
-                  @click="del(item.id)"
+                  @click.prevent="del(item.id)"
                   variant="outline-danger"
                 >delete</b-button>&nbsp;
                 <b-button
                   class="btn"
                   id="btn_doing"
-                  @click="edit(item.id)"
+                  @click.prevent="edit(item.id)"
                   variant="outline-primary"
                 >Edit</b-button>&nbsp;
               </td>
@@ -57,27 +70,29 @@
         </table>
       </b-row>
     </b-container>
-    <div id="table_history" v-show="viewHistory">
-      <table class="table table-striped">
-        <thead>
-          <th>Done</th>
-          <th>
-            <b-button class="btn" id="btn_todo" @click="clear" variant="danger">CLEAR</b-button>
-          </th>
-        </thead>
-        <tbody v-for="(item,i) in todo" :key="i">
-          <tr v-if="item.done==1">
-            <td>{{item.task}}</td>
-            <span>
-              <img
-                id="star"
-                src="https://graphiccave.com/wp-content/uploads/2015/03/Blue-Star-PNG.png"
-                alt
-              >
-            </span>
-          </tr>
-        </tbody>
-      </table>
+    <div v-show="viewHistory">
+      <span style="font-size:30px;margin-left:0%">Done</span>
+     <b-button style="margin-left:30%;margin-buttom :1%" class="btn" id="btn_todo" @click="clear" variant="danger">CLEAR</b-button>
+     <p></p>
+      <div id="table_history">
+        <table class="table table-striped">
+          <thead>
+            <th></th>
+          </thead>
+          <tbody v-for="(item,i) in todo" :key="i" id="table">
+            <tr v-if="item.done==1">
+              <td>{{item.task}}</td>
+              <span>
+                <img
+                  id="star"
+                  src="https://graphiccave.com/wp-content/uploads/2015/03/Blue-Star-PNG.png"
+                  alt
+                />
+              </span>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -96,8 +111,10 @@ export default {
     axios
       .post("http://localhost:3000/getdata")
       .then(response => {
-        console.log(response);
-        this.todo = response.data.filter(todo => !todo.done);
+        // console.log(response);
+        this.todo = response.data;
+        this.nickname = response.data.nickname;
+        console.log("nickname", nickname);
       })
       .catch(error => {
         console.log(error);
@@ -110,12 +127,20 @@ export default {
           if (task.done == 0) {
             task.done = 1;
           }
-          console.log(task);
+          // console.log(task);
           axios
             .post("http://localhost:3000/done", { done: task })
             .then(response => {
-              this.todo = response.data;
-              console.log("to do : ", this.todo);
+              axios
+                .post("http://localhost:3000/getdata")
+                .then(response => {
+                  // console.log(response);
+                  this.todo = response.data;
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+              // console.log("to do : ", this.todo);
             })
             .catch(error => {
               console.log(error);
@@ -127,22 +152,45 @@ export default {
       this.$router.push("/Add/" + item);
     },
     del(id) {
-      axios
-        .post("http://localhost:3000/delete",{task: id})
-        .then(response => {
-          this.todo = response.data;
-          // this.getdata();
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      this.todo.map(task => {
+        if (task.id == id) {
+          if (task.delete == 0) {
+            task.delete = 1;
+          }
+          // console.log(task);
+          axios
+            .post("http://localhost:3000/delete", { delete: task })
+            .then(response => {
+              axios
+                .post("http://localhost:3000/getdata")
+                .then(response => {
+                  // console.log(response);
+                  this.todo = response.data;
+                })
+                .catch(error => {
+                  console.log(error);
+                });
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        }
+      });
+      this.created();
     },
     clear() {
       axios
         .post("http://localhost:3000/clear")
         .then(response => {
-          this.todo = response.data;
-          // this.getdata();
+          axios
+            .post("http://localhost:3000/getdata")
+            .then(response => {
+              // console.log(response);
+              this.todo = response.data;
+            })
+            .catch(error => {
+              console.log(error);
+            });
         })
         .catch(error => {
           console.log(error);
@@ -162,12 +210,38 @@ export default {
   padding: 3px;
 }
 #table_history {
-  /* margin-top: 20%; */
   margin-right: 12%;
   margin-left: 12%;
-
   padding: 10px;
   margin-bottom: 2%;
+  position: relative;
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 600px;
+  overflow-y: scroll;
+  /* border: 2px solid #f5d7e5; */
+   -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow:         3px 3px 5px 6px #ccc;
+  /* overflow: hidden; */
+  /* max-height: 600px */
+}
+#maintable{
+    margin-right: 12%;
+  margin-left: 12%;
+  padding: 10px;
+  margin-bottom: 2%;
+  position: relative;
+  height: 500px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 600px;
+  overflow-y: scroll;
+  /* border: 2px solid #f5d7e5; */
+   -moz-box-shadow:    3px 3px 5px 6px #ccc;
+  -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+  box-shadow:         3px 3px 5px 6px #ccc;
 }
 #btn_history {
   padding: 10px;
@@ -176,4 +250,12 @@ export default {
   height: 20px;
   width: auto;
 }
+
+/* table {
+  margin-left: 9%;
+  position: relative;
+  height: 200px;
+  overflow-x: auto;
+  overflow-y: hidden;
+} */
 </style>

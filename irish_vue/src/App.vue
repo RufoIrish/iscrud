@@ -1,10 +1,11 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
-      <hr />
-    </div>
+    <hr>
+    <!-- <div id="nav"> -->
+      <router-link to="/"></router-link>
+      <!-- <router-link to="/about">About</router-link> -->
+      <!-- <hr /> -->
+    <!-- </div> -->
     <router-view />
   </div>
 </template>
@@ -20,12 +21,16 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 0%;
   /* background-image: url("https://wallpapersite.com/images/pages/pic_w/6752.jpg"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  background-color: #f5d7e5;
   height: 100vh;
+}
+#nav{
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQ4C6Yx_bsevZ7fEjas8flRkhIszAA0ykx2eVBARv1kaNCGVtJc");
 }
 </style>
 
