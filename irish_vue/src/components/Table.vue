@@ -221,7 +221,7 @@ export default {
   position: relative;
   height: 500px;
   overflow-x: hidden;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   height: 450px;
   overflow-y: scroll;
   /* border: 2px solid #f5d7e5; */
@@ -239,7 +239,7 @@ export default {
   position: relative;
   height: 500px;
   overflow-x: hidden;
-  overflow-y: auto;
+  /* overflow-y: auto; */
   height: 600px;
   overflow-y: scroll;
   /* border: 2px solid #f5d7e5; */
