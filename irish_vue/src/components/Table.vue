@@ -27,7 +27,7 @@
       variant="danger"
       @click="$router.push('/')"
       v-if="main"
-    >Out</b-button>
+    >Back</b-button>
     <b-container class="bv-example-row" id="table_todo" v-show="main">
       <b-row>
         <!-- <b-table hover :items="todo"></b-table> -->
@@ -113,7 +113,6 @@ export default {
       .then(response => {
         // console.log(response);
         this.todo = response.data;
-        
       })
       .catch(error => {
         console.log(error);
@@ -205,7 +204,7 @@ export default {
 </script>
 <style scoped>
 #add {
-  margin-right: 10%;
+  margin-right: 2%;
   padding: 10px;
   margin-top: 2%;
   margin-bottom: 2%;
