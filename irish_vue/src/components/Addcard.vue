@@ -33,14 +33,36 @@
           ></b-form-input>
         </b-card-text>
 
-        <b-button @click="submit" variant="primary">
-          <span v-if="item == null">Add task</span>
-          <span v-else>Update</span>
-        </b-button>&nbsp;
+        <div variant="primary">
+          <b-button variant="primary" style="float:left"  v-if="item == null"  @click="submit">Add task</b-button>
+          <b-button style="float:left; margin-right:0" variant="primary" v-else @click="updateStat = true">Update</b-button>
+        </div>&nbsp;
         <b-button @click="$router.push('/Home')" variant="danger">cancel</b-button>
       </b-card>
     </center>
+          <div>
+          <b-modal v-model="updateStat" ok-only ok-variant="secondary" ok-title="">Are you sure you want to update this task to {{task}} ?
+            <br>
+            <br>
+             <b-button
+             style="width: 80px"
+                  class="btn"
+                  id="btn_doing"
+                  @click="submit"
+                  @click.prevent="updateStat = false"
+                  variant="outline-danger"
+                >Update</b-button>&nbsp;
+                <b-button
+                style="width: 60px"
+                  class="btn"
+                  id="btn_doing"
+                  @click.prevent="updateStat = false"
+                  variant="outline-primary"
+                >No</b-button>
+          </b-modal>
+        </div>
   </div>
+
 </template>
 <script>
 import axios from "axios";
@@ -48,8 +70,11 @@ import swal from "sweetalert";
 export default {
   data() {
     return {
+      task1:'',
+      schedule1:'',
       task: "",
-      schedule: ""
+      schedule: "",
+      updateStat: false
     };
   },
   props: {
@@ -58,6 +83,7 @@ export default {
   methods: {
     submit() {
       if (this.task != "" && this.schedule != "") {
+        this.schedule1 = this.schedule
         var Item = {
           task: this.task,
           schedule: this.schedule,
@@ -80,6 +106,7 @@ export default {
       }else{
         swal("Kindly complete the specified fields!")
       }
+
     }
   },
   watch: {
@@ -90,7 +117,7 @@ export default {
   created() {
     if (this.item != null) {
       axios
-        .post("http://localhost:3000/getItem", { id: this.item })
+        .post("http://localhost:3000/getItem",{ id: this.item })
         .then(res => {
           this.task = res.data[0].task;
           this.schedule = res.data[0].schedule;
