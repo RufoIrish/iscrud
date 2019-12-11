@@ -8,6 +8,7 @@
     <router-link to="/Add">
       <b-button variant="success" id="add">Add Task</b-button>
     </router-link>
+    <!-- <div id ="loading" style="display:none"><img src="https://www.tunerstop.com/public/images/loading.gif" alt=""></div> -->
     <b-button
       class="btn_history"
       @click.prevent="main = false,viewHistory = true"
@@ -25,7 +26,7 @@
       style="margin-left:55%"
       class="btn_history"
       variant="danger"
-      @click="$router.push('/')"
+      @click="loginPage"
       v-if="main"
     >Log Out</b-button>
     <b-container class="bv-example-row" id="table_todo" v-show="main">
@@ -51,7 +52,7 @@
                 >mark as done</b-button>&nbsp;
                 <b-button
                   class="btn"
-                  id="btn_doing"  
+                  id="btn_doing"
                   @click.prevent="goingToDel(item.id,item.task,item.date)"
                   variant="outline-danger"
                 >delete</b-button>&nbsp;
@@ -66,87 +67,93 @@
           </tbody>
         </table>
       </b-row>
-        <div>
-          <b-modal v-model="delmodalShow" ok-only ok-variant="secondary" ok-title="">Are you sure you want to delete {{task}} ?
-            <br>
-            <br>
-             <b-button
-             style="width: 60px"
-                  class="btn"
-                  id="btn_doing"
-                  @click.prevent="del()"
-                  variant="outline-danger"
-                >Delete</b-button>&nbsp;
-                <b-button
-                style="width: 60px"
-                  class="btn"
-                  id="btn_doing"
-                  @click.prevent="delmodalShow = false"
-                  variant="outline-primary"
-                >No</b-button>
-          </b-modal>
-        </div>
-        <div>
-          <b-modal v-model="doneStat" ok-only ok-variant="secondary" ok-title="">Are you sure this task is done? <br> task:  {{task}}
-            <br>
-            <br>
-             <b-button
-             style="width: 80px"
-                  class="btn"
-                  id="btn_doing"
-                  @click="done"
-                  @click.prevent="doneStat = false"
-                  variant="outline-danger"
-                >Done</b-button>&nbsp;
-                <b-button
-                style="width: 60px"
-                  class="btn"
-                  id="btn_doing"
-                  @click.prevent="doneStat = false"
-                  variant="outline-primary"
-                >No</b-button>
-          </b-modal>
-        </div>
-               <div>
-          <b-modal v-model="updatemodalShow" ok-only ok-variant="secondary" ok-title="">Are you sure you want to delete {{task}} ?
-            <br>
-            <br>
-             <b-button
-             style="width: 60px"
-                  class="btn"
-                  id="btn_doing"
-                  @click.prevent="del()"
-                  variant="outline-danger"
-                >Update</b-button>&nbsp;
-                <b-button
-                style="width: 60px"
-                  class="btn"
-                  id="btn_doing"
-                  @click.prevent="updatemodalShow = false"
-                  variant="outline-primary"
-                >No</b-button>
-          </b-modal>
-        </div>
-        <div>
-          <b-modal v-model="clearmodalShow" ok-only ok-variant="secondary" ok-title="">Are you sure you want to clear done task ?
-            <br>
-            <br>
-             <b-button
-             style="width: 60px"
-                  class="btn"
-                  id="btn_doing"
-                  @click.prevent="clear()"
-                  variant="outline-danger"
-                >Clear</b-button>&nbsp;
-                <b-button
-                style="width: 60px"
-                  class="btn"
-                  id="btn_doing"
-                  @click.prevent="clearmodalShow = false"
-                  variant="outline-primary"
-                >No</b-button>
-          </b-modal>
-        </div>
+      <div>
+        <b-modal v-model="delmodalShow" ok-only ok-variant="secondary" ok-title>
+          Are you sure you want to delete {{task}} ?
+          <br />
+          <br />
+          <b-button
+            style="width: 60px"
+            class="btn"
+            id="btn_doing"
+            @click.prevent="del()"
+            variant="outline-danger"
+          >Delete</b-button>&nbsp;
+          <b-button
+            style="width: 60px"
+            class="btn"
+            id="btn_doing"
+            @click.prevent="delmodalShow = false"
+            variant="outline-primary"
+          >No</b-button>
+        </b-modal>
+      </div>
+      <div>
+        <b-modal v-model="doneStat" ok-only ok-variant="secondary" ok-title>
+          Are you sure this task is done?
+          <br />
+          task: {{task}}
+          <br />
+          <br />
+          <b-button
+            style="width: 80px"
+            class="btn"
+            id="btn_doing"
+            @click="done"
+            @click.prevent="doneStat = false"
+            variant="outline-danger"
+          >Done</b-button>&nbsp;
+          <b-button
+            style="width: 60px"
+            class="btn"
+            id="btn_doing"
+            @click.prevent="doneStat = false"
+            variant="outline-primary"
+          >No</b-button>
+        </b-modal>
+      </div>
+      <div>
+        <b-modal v-model="updatemodalShow" ok-only ok-variant="secondary" ok-title>
+          Are you sure you want to delete {{task}} ?
+          <br />
+          <br />
+          <b-button
+            style="width: 60px"
+            class="btn"
+            id="btn_doing"
+            @click.prevent="del()"
+            variant="outline-danger"
+          >Update</b-button>&nbsp;
+          <b-button
+            style="width: 60px"
+            class="btn"
+            id="btn_doing"
+            @click.prevent="updatemodalShow = false"
+            variant="outline-primary"
+          >No</b-button>
+        </b-modal>
+      </div>
+      <div>
+        <b-modal v-model="clearmodalShow" ok-only ok-variant="secondary" ok-title>
+          Are you sure you want to clear done task ?
+          <br />
+          <br />
+          <b-button
+            style="width: 60px"
+            class="btn"
+            id="btn_doing"
+            @click.prevent="clear()"
+            variant="outline-danger"
+          >Clear</b-button>&nbsp;
+          <b-button
+            style="width: 60px"
+            class="btn"
+            id="btn_doing"
+            @click.prevent="clearmodalShow = false"
+            variant="outline-primary"
+          >No</b-button>
+        </b-modal>
+      </div>
     </b-container>
     <div v-show="viewHistory">
       <span style="font-size:30px;margin-left:0%">Done</span>
@@ -177,7 +184,7 @@
     </div>
   </div>
 </template>
-<script   src="https://code.jquery.com/jquery-3.4.1.slim.min.js"   integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8="   crossorigin="anonymous"></script>
+
 <script>
 import axios from "axios";
 export default {
@@ -186,13 +193,15 @@ export default {
       todo: [],
       viewHistory: false,
       main: true,
-      delmodalShow:false,
-      updatemodalShow:false,
-      id:'',
-      task:'',
-      date:'',
-      clearmodalShow:false,
-      doneStat:false
+      delmodalShow: false,
+      updatemodalShow: false,
+      id: "",
+      task: "",
+      date: "",
+      clearmodalShow: false,
+      doneStat: false,
+      task1: "",
+      schedule2: ""
     };
   },
   mounted() {
@@ -207,10 +216,14 @@ export default {
       });
   },
   methods: {
-    goingDone(id, task){
-      this.id = id,
-      this.task = task,
-      this.doneStat = true
+    goingDone(id, task) {
+      (this.id = id), (this.task = task), (this.doneStat = true);
+    },
+    loginPage() {
+      //  $("#loading").show() ``
+
+      //  setTimeout(function() { $("#loading").hide(); }, 5000);
+      this.$router.push("/");
     },
     done() {
       this.todo.map(task => {
@@ -240,13 +253,15 @@ export default {
       });
     },
     edit(id, task, schedule) {
+      this.task1 = task;
+      this.schedule2 = schedule;
       this.$router.push("/Add/" + id);
     },
-    goingToDel(id,task,date){
-      this.id = id,
-      this.task = task,
-      this.date = date,
-      this.delmodalShow= true
+    goingToDel(id, task, date) {
+      (this.id = id),
+        (this.task = task),
+        (this.date = date),
+        (this.delmodalShow = true);
     },
     del() {
       this.todo.map(task => {
@@ -273,8 +288,7 @@ export default {
             });
         }
       });
-      this.delmodalShow= false
-
+      this.delmodalShow = false;
     },
     clear(nickname) {
       axios
@@ -299,7 +313,7 @@ export default {
         icon: "success",
         button: "Thanks!"
       });
-      this.clearmodalShow = false
+      this.clearmodalShow = false;
     }
   }
 };
@@ -363,4 +377,6 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
 } */
+
+
 </style>

@@ -35,9 +35,9 @@
 
         <div variant="primary">
           <b-button variant="primary" style="float:left"  v-if="item == null"  @click="submit">Add task</b-button>
-          <b-button style="float:left; margin-right:0" variant="primary" v-else @click="updateStat = true">Update</b-button>
+          <b-button style="float:left; margin-right:0" variant="primary" v-else @click="check">Update</b-button>
         </div>&nbsp;
-        <b-button @click="$router.push('/Home')" variant="danger">cancel</b-button>
+        <b-button @click="$router.push('/Home')" variant="danger" style="margin-left: 40%">cancel</b-button>
       </b-card>
     </center>
           <div>
@@ -71,6 +71,8 @@ export default {
   data() {
     return {
       task1:'',
+      temptask: '',
+      tempsched: '',
       schedule1:'',
       task: "",
       schedule: "",
@@ -107,6 +109,13 @@ export default {
         swal("Kindly complete the specified fields!")
       }
 
+    },
+    check() {
+      if (this.temptask == this.task && this.tempsched == this.schedule) {
+        swal("You haven't change anything!");
+      } else {
+      this.updateStat = true;
+      }
     }
   },
   watch: {
@@ -122,6 +131,8 @@ export default {
           this.task = res.data[0].task;
           this.schedule = res.data[0].schedule;
           console.log(res.data[0].task)
+          this.temptask = this.task;
+          this.tempsched = this.schedule;
         })
         .catch(err => {
           console.log(err);
